@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTop Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <header class="header">
+            <div class="header-top">
+                <h1>System Dashboard</h1>
+                <nav class="nav-links">
+                    <a href="/dashboard.html" class="nav-link active">Dashboard</a>
+                    <a href="/procs.html" class="nav-link">Processes</a>
+                </nav>
+            </div>
+            <div class="header-info">
+                <span id="uptime" class="uptime"></span>
+                <span id="timestamp" class="timestamp"></span>
+            </div>
+        </header>
+        
+        <div class="grid">
+            <div class="card cpu-card">
+                <h2>CPU Usage</h2>
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+                <div class="stats" id="cpuStats"></div>
+            </div>
+            
+            <div class="card memory-card">
+                <h2>Memory</h2>
+                <div class="chart-container">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+                <div class="stats" id="memoryStats"></div>
+            </div>
+            
+            <div class="card load-card">
+                <h2>Load Average</h2>
+                <div class="chart-container">
+                    <canvas id="loadChart"></canvas>
+                </div>
+                <div class="stats" id="loadStats"></div>
+            </div>
+            
+            <div class="card network-card">
+                <h2>Network Traffic</h2>
+                <div class="chart-container">
+                    <canvas id="networkChart"></canvas>
+                </div>
+                <div class="stats" id="networkStats"></div>
+            </div>
+            
+            <div class="card disks-card">
+                <h2>Disks</h2>
+                <div class="disks-container" id="disksContainer"></div>
+            </div>
+            
+            <div class="card processes-card">
+                <h2>Processes</h2>
+                <div class="processes-info" id="processesInfo"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

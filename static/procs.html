@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTop Processes</title>
+    <link rel="stylesheet" href="css/procs.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <h1>Process List</h1>
+                <nav class="nav-links">
+                    <a href="/dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="/procs.html" class="nav-link active">Processes</a>
+                </nav>
+            </div>
+            <div class="header-info">
+                <span class="summary">Total: <strong id="totalCount">0</strong></span>
+                <span class="summary">Running: <strong id="runningCount">0</strong></span>
+                <span class="summary">Sleeping: <strong id="sleepingCount">0</strong></span>
+                <span class="summary">Stopped: <strong id="stoppedCount">0</strong></span>
+                <span class="summary">Zombie: <strong id="zombieCount">0</strong></span>
+                <span class="summary">Threads: <strong id="threadCount">0</strong></span>
+            </div>
+            <div class="memory-info">
+                <span class="memory-stat">Memory Used: <strong id="memoryUsed">0</strong> GB</span>
+                <span class="memory-stat">Memory Total: <strong id="memoryTotal">0</strong> GB</span>
+                <span class="memory-stat">Memory: <strong id="memoryPercent">0</strong>%</span>
+                <span class="memory-stat">Swap Used: <strong id="swapUsed">0</strong>%</span>
+            </div>
+            <div class="header-controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name or PID...">
+                <span id="timestamp" class="timestamp"></span>
+            </div>
+        </header>
+        
+        <div class="table-container">
+            <table class="process-table">
+                <thead>
+                    <tr>
+                        <th class="col-pid sortable" data-column="pid">PID <span class="sort-icon"></span></th>
+                        <th class="col-ppid sortable" data-column="ppid">PPID <span class="sort-icon"></span></th>
+                        <th class="col-name sortable" data-column="name">Name <span class="sort-icon"></span></th>
+                        <th class="col-user sortable" data-column="user">User <span class="sort-icon"></span></th>
+                        <th class="col-state sortable" data-column="state">State <span class="sort-icon"></span></th>
+                        <th class="col-cpu sortable" data-column="cpu_percent">CPU% <span class="sort-icon"></span></th>
+                        <th class="col-memory sortable" data-column="memory">RSS (MB) <span class="sort-icon"></span></th>
+                        <th class="col-vmem sortable" data-column="vmem">VMEM (MB) <span class="sort-icon"></span></th>
+                        <th class="col-threads sortable" data-column="threads">Threads <span class="sort-icon"></span></th>
+                        <th class="col-uptime sortable" data-column="uptime_seconds">Uptime <span class="sort-icon"></span></th>
+                    </tr>
+                </thead>
+                <tbody id="processTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="/js/procs.js"></script>
+</body>
+</html>
