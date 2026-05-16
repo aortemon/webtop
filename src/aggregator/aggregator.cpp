@@ -12,10 +12,9 @@
 #include "reader/parsers/cpu_parser.hpp"
 #include "reader/parsers/network_parser.hpp"
 
-
 namespace webtop::aggregator {
 
-MetricsAggregator::MetricsAggregator()  = default;
+MetricsAggregator::MetricsAggregator() = default;
 
 uint64_t MetricsAggregator::GetCurrentTimestamp() {
   return std::chrono::duration_cast<std::chrono::seconds>(
@@ -25,8 +24,8 @@ uint64_t MetricsAggregator::GetCurrentTimestamp() {
 SystemSnapshot MetricsAggregator::GetCurrentSnapshot() {
   SystemSnapshot snapshot;
 
-  auto current_cpu = reader::CpuReader::ReadAll();
-  auto current_network = reader::NetworkReader::ReadAll();
+  auto current_cpu = reader::CpuParser::ReadAll();
+  auto current_network = reader::NetworkParser::ReadAll();
   auto procs = ProcBuilder::Build();
 
   snapshot.timestamp = GetCurrentTimestamp();
@@ -46,7 +45,7 @@ SystemSnapshot MetricsAggregator::GetCurrentSnapshot() {
 
 FullProcessSnapshot MetricsAggregator::GetFullProcessSnapshot() {
   auto snapshot = ProcBuilder::Build();
-  auto current_cpu = reader::CpuReader::ReadAll();
+  auto current_cpu = reader::CpuParser::ReadAll();
   snapshot.memory = MemoryBuilder::Build();
   snapshot.cpu = cpu_analizer_.Compute(current_cpu);
   snapshot = proc_analizer_.Compute(snapshot);

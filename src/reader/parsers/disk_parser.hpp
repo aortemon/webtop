@@ -36,7 +36,7 @@ struct MountEntry {
   std::string options;
 };
 
-class DiskReader {
+class DiskParser {
   static MountEntry ParseMountLine(const std::string &line);
   static bool GetStatsByPath(const std::string &path, DiskStats &stats);
   static bool IsPhysicalDisk(const std::string &device);

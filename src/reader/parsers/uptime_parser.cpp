@@ -3,11 +3,10 @@
 
 #include "reader/file_reader.hpp"
 
-
 namespace webtop::reader {
 
-UptimeStats UptimeReader::Read() {
-  UptimeStats data = {.uptime_seconds=0.0, .idle_seconds=0.0};
+UptimeStats UptimeParser::Read() {
+  UptimeStats data = {.uptime_seconds = 0.0, .idle_seconds = 0.0};
   std::string content = FileReader::ReadFile("/proc/uptime");
 
   if (content.empty()) {

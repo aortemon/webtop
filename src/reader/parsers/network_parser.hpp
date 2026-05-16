@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-
 namespace webtop::reader {
 
 struct NetworkInterfaceStats {
@@ -29,11 +28,11 @@ struct NetworkInterfaceStats {
   uint64_t tx_compressed;
 };
 
-class NetworkReader {
+class NetworkParser {
   static NetworkInterfaceStats ParseNetDevLine(const std::string &line);
   static bool IsInterfaceLine(const std::string &line);
 
- public:
+public:
   static std::vector<NetworkInterfaceStats> ReadAll();
   static bool IsInterfaceDestDefault(const std::string &iname);
 };

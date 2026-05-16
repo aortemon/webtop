@@ -207,15 +207,12 @@ void HttpServer::AcceptLoop() {
   }
 }
 
-void HttpServer::Start() {
+bool HttpServer::Start() {
   PrintStartMessage();
   server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
   if (server_fd_ < 0) {
-    return;
+    return false;
   }
-
-  int opt = 1;
-  setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
   struct sockaddr_in address{};
   address.sin_family = AF_INET;
@@ -229,12 +226,15 @@ void HttpServer::Start() {
   if (bind(server_fd_, reinterpret_cast<struct sockaddr *>(&address),
            sizeof(address)) < 0) {
     close(server_fd_);
-    return;
+    logger::Logger::Instance().Error("Can't start server. Maybe port " +
+                                     std::to_string(port_) +
+                                     " is already taken");
+    return false;
   }
 
   if (listen(server_fd_, 10) < 0) {
     close(server_fd_);
-    return;
+    return false;
   }
 
   running_ = true;
@@ -248,6 +248,7 @@ void HttpServer::Start() {
   accept_thread_ = std::thread(&HttpServer::AcceptLoop, this);
 
   pthread_sigmask(SIG_UNBLOCK, &mask, nullptr);
+  return true;
 }
 
 void HttpServer::Stop() {

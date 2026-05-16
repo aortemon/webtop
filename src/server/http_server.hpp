@@ -60,7 +60,7 @@ class HttpServer {
              int common_update_rate, int procs_update_rate);
   ~HttpServer();
 
-  void Start();
+  bool Start();
   void Stop();
 };
 

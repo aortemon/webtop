@@ -23,10 +23,10 @@ uint64_t GetCurrentTimestamp() {
 FullProcessSnapshot ProcBuilder::Build() {
   FullProcessSnapshot snapshot;
   snapshot.timestamp = GetCurrentTimestamp();
-  snapshot.total_count = reader::ProcessReader::GetProcessCount();
-  snapshot.thread_count = reader::ProcessReader::GetThreadCount();
+  snapshot.total_count = reader::ProcessParser::GetProcessCount();
+  snapshot.thread_count = reader::ProcessParser::GetThreadCount();
 
-  auto all_procs = reader::ProcessReader::ReadAll();
+  auto all_procs = reader::ProcessParser::ReadAll();
 
   snapshot.running_total = std::ranges::count_if(
       all_procs, [](const auto &x) { return x.state == 'R'; });
@@ -38,7 +38,7 @@ FullProcessSnapshot ProcBuilder::Build() {
       all_procs, [](const auto &x) { return x.state == 'Z'; });
 
   auto system_uptime_ticks =
-      static_cast<uint64_t>(reader::UptimeReader::Read().uptime_seconds *
+      static_cast<uint64_t>(reader::UptimeParser::Read().uptime_seconds *
                             static_cast<double>(sysconf(_SC_CLK_TCK)));
 
   for (const auto &proc : all_procs) {

@@ -7,17 +7,16 @@
 
 #include "reader/file_reader.hpp"
 
-
 namespace webtop::reader {
 
-std::map<std::string, uint64_t> MemoryReader::ParseMemInfo() {
+std::map<std::string, uint64_t> MemoryParser::ParseMemInfo() {
   std::map<std::string, uint64_t> result;
 
   auto lines = FileReader::ReadLines("/proc/meminfo");
   for (const auto &line : lines) {
     if (line.empty()) {
       continue;
-}
+    }
 
     std::istringstream iss(line);
     std::string key;
@@ -36,7 +35,7 @@ std::map<std::string, uint64_t> MemoryReader::ParseMemInfo() {
   return result;
 }
 
-MemoryData MemoryReader::Read() {
+MemoryData MemoryParser::Read() {
   auto meminfo = ParseMemInfo();
 
   MemoryData data = {};

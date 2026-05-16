@@ -7,8 +7,8 @@ struct UptimeStats {
   double idle_seconds;
 };
 
-class UptimeReader {
- public:
+class UptimeParser {
+public:
   static UptimeStats Read();
 };
 

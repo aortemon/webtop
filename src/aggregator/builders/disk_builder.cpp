@@ -4,12 +4,11 @@
 #include "aggregator/common_snapshot.hpp"
 #include "reader/parsers/disk_parser.hpp"
 
-
 namespace webtop::aggregator {
 
 std::vector<DiskSnapshot> DiskBuilder::Build() {
   std::vector<DiskSnapshot> result;
-  auto disks = reader::DiskReader::ReadAll();
+  auto disks = reader::DiskParser::ReadAll();
 
   for (const auto &disk : disks) {
     DiskSnapshot snapshot;

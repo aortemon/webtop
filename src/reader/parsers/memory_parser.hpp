@@ -43,7 +43,7 @@ struct MemoryData {
   }
 };
 
-class MemoryReader {
+class MemoryParser {
   static std::map<std::string, uint64_t> ParseMemInfo();
 
 public:

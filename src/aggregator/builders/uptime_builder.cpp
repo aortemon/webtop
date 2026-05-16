@@ -15,7 +15,7 @@ constexpr int kSecondsInMinute = 60;
 constexpr uint64_t kSNPrintfBufferSize = 64;
 
 std::string UptimeBuilder::Build() {
-  auto data = reader::UptimeReader::Read();
+  auto data = reader::UptimeParser::Read();
   auto seconds = static_cast<int>(data.uptime_seconds);
 
   int days = seconds / kSecondsInDay;

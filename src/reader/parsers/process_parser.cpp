@@ -17,7 +17,7 @@
 
 namespace webtop::reader {
 
-int ProcessReader::FilterProcDirs(const struct dirent *entry) {
+int ProcessParser::FilterProcDirs(const struct dirent *entry) {
   const char *name = static_cast<const char *>(entry->d_name);
 
   if (name[0] < '0' || name[0] > '9') {
@@ -32,7 +32,7 @@ int ProcessReader::FilterProcDirs(const struct dirent *entry) {
   return 1;
 }
 
-int32_t ProcessReader::ParseUidFromStatus(const std::string &status_content) {
+int32_t ProcessParser::ParseUidFromStatus(const std::string &status_content) {
   std::istringstream iss(status_content);
   std::string line;
 
@@ -53,12 +53,12 @@ int32_t ProcessReader::ParseUidFromStatus(const std::string &status_content) {
   return -1;
 }
 
-std::string ProcessReader::ReadStatusFile(int32_t pid) {
+std::string ProcessParser::ReadStatusFile(int32_t pid) {
   std::string path = "/proc/" + std::to_string(pid) + "/status";
   return FileReader::ReadFile(path);
 }
 
-ProcessInfo ProcessReader::ParseStatFile(int32_t pid,
+ProcessInfo ProcessParser::ParseStatFile(int32_t pid,
                                          const std::string &content) {
   ProcessInfo info = {};
   info.pid = pid;
@@ -108,12 +108,12 @@ ProcessInfo ProcessReader::ParseStatFile(int32_t pid,
   return info;
 }
 
-std::string ProcessReader::ReadStatFile(int32_t pid) {
+std::string ProcessParser::ReadStatFile(int32_t pid) {
   std::string path = "/proc/" + std::to_string(pid) + "/stat";
   return FileReader::ReadFile(path);
 }
 
-std::vector<int32_t> ProcessReader::GetAllPids() {
+std::vector<int32_t> ProcessParser::GetAllPids() {
   std::vector<int32_t> pids;
 
   struct dirent **namelist = nullptr;
@@ -141,7 +141,7 @@ std::vector<int32_t> ProcessReader::GetAllPids() {
   return pids;
 }
 
-int32_t ProcessReader::GetProcessCount() {
+int32_t ProcessParser::GetProcessCount() {
   struct dirent **namelist = nullptr;
   int count = scandir("/proc", &namelist, FilterProcDirs, nullptr);
 
@@ -161,7 +161,7 @@ int32_t ProcessReader::GetProcessCount() {
   return count;
 }
 
-int32_t ProcessReader::GetThreadCount() {
+int32_t ProcessParser::GetThreadCount() {
   int32_t total_threads = 0;
   auto pids = GetAllPids();
 
@@ -189,7 +189,7 @@ int32_t ProcessReader::GetThreadCount() {
   return total_threads;
 }
 
-std::string ProcessReader::GetUsernameByUid(int32_t uid) {
+std::string ProcessParser::GetUsernameByUid(int32_t uid) {
   struct passwd pwd{};
   struct passwd *result = nullptr;
   std::array<char, 1024> buff{};
@@ -200,7 +200,7 @@ std::string ProcessReader::GetUsernameByUid(int32_t uid) {
   return {};
 }
 
-ProcessInfo ProcessReader::GetProcessInfo(int32_t pid) {
+ProcessInfo ProcessParser::GetProcessInfo(int32_t pid) {
   std::string stat_content = ReadStatFile(pid);
   if (stat_content.empty()) {
     return ProcessInfo{};
@@ -217,7 +217,7 @@ ProcessInfo ProcessReader::GetProcessInfo(int32_t pid) {
   return info;
 }
 
-std::vector<ProcessInfo> ProcessReader::ReadAll() {
+std::vector<ProcessInfo> ProcessParser::ReadAll() {
   std::vector<ProcessInfo> processes;
   auto pids = GetAllPids();
 

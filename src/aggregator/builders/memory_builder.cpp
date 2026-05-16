@@ -3,11 +3,10 @@
 #include "aggregator/common_snapshot.hpp"
 #include "reader/parsers/memory_parser.hpp"
 
-
 namespace webtop::aggregator {
 
 MemorySnapshot MemoryBuilder::Build() {
-  auto data = reader::MemoryReader::Read();
+  auto data = reader::MemoryParser::Read();
 
   MemorySnapshot snapshot{};
   snapshot.total = data.MemTotalMb();

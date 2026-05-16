@@ -6,29 +6,28 @@
 
 #include "reader/file_reader.hpp"
 
-
 namespace webtop::reader {
 
-CpuData CpuReader::ParseCpuLine(const std::string &line) {
+CpuData CpuParser::ParseCpuLine(const std::string &line) {
   CpuData data = {};
   std::istringstream iss(line);
   std::string label;
 
   iss >> label;
-  iss >> data.user >> data.nice >> data.system >> data.idle >> data.iowait >> data.irq
-      >> data.softirq >> data.steal;
+  iss >> data.user >> data.nice >> data.system >> data.idle >> data.iowait >>
+      data.irq >> data.softirq >> data.steal;
 
   return data;
 }
 
-bool CpuReader::IsCpuLine(const std::string &line) {
+bool CpuParser::IsCpuLine(const std::string &line) {
   if (line.length() < 3) {
     return false;
-}
+  }
   return line.substr(0, 3) == "cpu";
 }
 
-std::vector<CpuData> CpuReader::ReadAll() {
+std::vector<CpuData> CpuParser::ReadAll() {
   std::vector<CpuData> result;
   auto lines = FileReader::ReadLines("/proc/stat");
 
@@ -43,11 +42,11 @@ std::vector<CpuData> CpuReader::ReadAll() {
   return result;
 }
 
-std::vector<CpuData> CpuReader::ReadCores() {
+std::vector<CpuData> CpuParser::ReadCores() {
   auto all = ReadAll();
   if (all.size() <= 1) {
     return {};
-}
+  }
   return {all.begin() + 1, all.end()};
 }
 

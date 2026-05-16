@@ -45,7 +45,7 @@ ServerConfig ReadServerConfig() {
     } else if (key == "ENABLE_COLORED_OUTPUT") {
       config.colored_output = value == "1";
     } else if (key == "STATIC_DIR") {
-      config.static_dir = value;
+      config.static_dir = project_root / value;
     } else if (key == "COMMON_STATS_UPDATE_RATE") {
       config.common_stats_send_rate = std::stoi(value);
     } else if (key == "PROCS_STATS_UPDATE_RATE") {
@@ -69,7 +69,9 @@ int main() {
                                     config.common_stats_send_rate,
                                     config.procs_stats_send_rate);
 
-  server.Start();
+  if (!server.Start()) {
+    return -1;
+  };
   while (running) {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }

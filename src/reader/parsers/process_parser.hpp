@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-
 namespace webtop::reader {
 
 struct ProcessInfo {
@@ -33,7 +32,7 @@ struct ProcessInfo {
   uint64_t starttime_ticks;
 };
 
-class ProcessReader {
+class ProcessParser {
   static ProcessInfo ParseStatFile(int32_t pid, const std::string &content);
   static std::string ReadStatusFile(int32_t pid);
   static int32_t ParseUidFromStatus(const std::string &status_content);
@@ -43,7 +42,7 @@ class ProcessReader {
   static ProcessInfo GetProcessInfo(int32_t pid);
   static std::string GetUsernameByUid(int32_t uid);
 
- public:
+public:
   static std::vector<ProcessInfo> ReadAll();
   static int32_t GetProcessCount();
   static int32_t GetThreadCount();

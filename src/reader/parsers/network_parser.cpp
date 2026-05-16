@@ -8,23 +8,22 @@
 
 #include "reader/file_reader.hpp"
 
-
 namespace webtop::reader {
-bool NetworkReader::IsInterfaceLine(const std::string &line) {
+bool NetworkParser::IsInterfaceLine(const std::string &line) {
   if (line.find("Inter-|") != std::string::npos) {
     return false;
-}
+  }
   if (line.find(" face |") != std::string::npos) {
     return false;
-}
+  }
   if (line.empty()) {
     return false;
-}
+  }
 
   return line.find(':') != std::string::npos;
 }
 
-NetworkInterfaceStats NetworkReader::ParseNetDevLine(const std::string &line) {
+NetworkInterfaceStats NetworkParser::ParseNetDevLine(const std::string &line) {
   NetworkInterfaceStats stats{};
 
   size_t colon_pos = line.find(':');
@@ -63,13 +62,14 @@ NetworkInterfaceStats NetworkReader::ParseNetDevLine(const std::string &line) {
   return stats;
 }
 
-bool NetworkReader::IsInterfaceDestDefault(const std::string &iname) {
+bool NetworkParser::IsInterfaceDestDefault(const std::string &iname) {
   auto lines = FileReader::ReadLines("/proc/net/route");
-  return std::ranges::any_of(lines,
-                             [&iname](const std::string &line) { return line.starts_with(iname); });
+  return std::ranges::any_of(lines, [&iname](const std::string &line) {
+    return line.starts_with(iname);
+  });
 }
 
-std::vector<NetworkInterfaceStats> NetworkReader::ReadAll() {
+std::vector<NetworkInterfaceStats> NetworkParser::ReadAll() {
   std::vector<NetworkInterfaceStats> interfaces;
 
   auto lines = FileReader::ReadLines("/proc/net/dev");

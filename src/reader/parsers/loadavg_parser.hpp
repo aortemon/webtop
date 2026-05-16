@@ -2,7 +2,6 @@
 
 #include <cstdint>
 
-
 namespace webtop::reader {
 
 struct LoadAvgStats {
@@ -14,8 +13,8 @@ struct LoadAvgStats {
   int32_t last_pid;
 };
 
-class LoadAvgReader {
- public:
+class LoadAvgParser {
+public:
   static LoadAvgStats Read();
 };
 

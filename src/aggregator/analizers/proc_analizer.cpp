@@ -16,7 +16,7 @@ void ProcAnalizer::Reset() { first_run_ = true; }
 FullProcessSnapshot ProcAnalizer::Compute(const FullProcessSnapshot &current) {
   std::lock_guard<std::mutex> lock(mutex_);
   auto result = current;
-  result.system_total = reader::CpuReader::ReadAll()[0].Total();
+  result.system_total = reader::CpuParser::ReadAll()[0].Total();
   if (first_run_) {
     first_run_ = false;
     prev_ = result;

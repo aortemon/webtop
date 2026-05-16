@@ -13,7 +13,7 @@
 
 namespace webtop::reader {
 
-MountEntry DiskReader::ParseMountLine(const std::string &line) {
+MountEntry DiskParser::ParseMountLine(const std::string &line) {
   MountEntry entry;
   std::istringstream iss(line);
 
@@ -22,7 +22,7 @@ MountEntry DiskReader::ParseMountLine(const std::string &line) {
   return entry;
 }
 
-bool DiskReader::IsVirtualFilesystem(const std::string &fs_type) {
+bool DiskParser::IsVirtualFilesystem(const std::string &fs_type) {
   static const std::vector<std::string> kVirtualFs = {
       "tmpfs",    "devtmpfs",  "proc",        "sysfs",    "cgroup",
       "cgroup2",  "devpts",    "securityfs",  "fusectl",  "pstore",
@@ -34,7 +34,7 @@ bool DiskReader::IsVirtualFilesystem(const std::string &fs_type) {
       kVirtualFs, [&fs_type](const auto &vfs) { return fs_type == vfs; }));
 }
 
-bool DiskReader::IsPhysicalDisk(const std::string &device) {
+bool DiskParser::IsPhysicalDisk(const std::string &device) {
   if (device.starts_with("/dev/loop")) {
     return false;
   }
@@ -62,7 +62,7 @@ bool DiskReader::IsPhysicalDisk(const std::string &device) {
   return false;
 }
 
-bool DiskReader::IsRealDevice(const std::string &device,
+bool DiskParser::IsRealDevice(const std::string &device,
                               const std::string &fs_type) {
   if (device.empty() || device == "none") {
     return false;
@@ -79,7 +79,7 @@ bool DiskReader::IsRealDevice(const std::string &device,
   return true;
 }
 
-bool DiskReader::GetStatsByPath(const std::string &path, DiskStats &stats) {
+bool DiskParser::GetStatsByPath(const std::string &path, DiskStats &stats) {
   struct statvfs stat{};
 
   if (statvfs(path.c_str(), &stat) != 0) {
@@ -93,8 +93,8 @@ bool DiskReader::GetStatsByPath(const std::string &path, DiskStats &stats) {
   stats.used_bytes = stats.total_bytes - stats.free_bytes;
 
   if (stats.total_bytes > 0) {
-    stats.used_percent =
-        100.0 * static_cast<double>(stats.used_bytes) / static_cast<double>(stats.total_bytes);
+    stats.used_percent = 100.0 * static_cast<double>(stats.used_bytes) /
+                         static_cast<double>(stats.total_bytes);
   } else {
     stats.used_percent = 0.0;
   }
@@ -102,7 +102,7 @@ bool DiskReader::GetStatsByPath(const std::string &path, DiskStats &stats) {
   return true;
 }
 
-std::vector<DiskStats> DiskReader::ReadAll() {
+std::vector<DiskStats> DiskParser::ReadAll() {
   std::vector<DiskStats> disks;
   auto lines = FileReader::ReadLines("/proc/mounts");
 
