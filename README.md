@@ -24,7 +24,7 @@ Web-система мониторинга ресурсов систем ОС в 
 
 - **Компилятор**: GCC 10+ / Clang 12+
 
-- **Система сборки**: CMake 3.28+
+- **Система сборки**: CMake 3.24+
 
 ### Опционально
 
@@ -154,6 +154,10 @@ cmake --build .
 - **WSL2 + Debian 13 (Trixie) через VS Code Remote Development** - базовая среда
   разработки
 
+- **GCC 14.2.0** и **Clang 19.1.7** - компиляторы С++
+
+- **npx tsc** - транспилятор TypeScript -> JavaScript
+
 - **Oracle VirtualBox + Ubuntu Server 22.04.5** - среда тестирования
 
 - **Git + GitHub**
@@ -165,6 +169,7 @@ cmake --build .
 - **npx prettier** - форматировщик Markdown и TypeScript
 
 - **npx markdownlint-cli2** - линтовщик Markdown
+
 
 ## Автор
 
