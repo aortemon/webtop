@@ -53,10 +53,6 @@ void SseHandler::Handle(int client_fd, const std::string &path) {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
   }
-  close(client_fd);
-
-  logger::Logger::Instance().Debug("Connection with " +
-                                   std::to_string(client_fd) + " closed");
 }
 
 } // namespace webtop::server

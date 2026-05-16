@@ -1,6 +1,5 @@
 #include "process_handler.hpp"
 
-
 #include <atomic>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -11,13 +10,12 @@
 
 using Json = nlohmann::json;
 
-
 namespace webtop::server {
 
 ProcessesHandler::ProcessesHandler(aggregator::MetricsAggregator &aggregator,
-                                   std::atomic<bool> &running, int update_interval)
-    : SseHandler(running, update_interval),
-      aggregator_(aggregator) {}
+                                   std::atomic<bool> &running,
+                                   int update_interval)
+    : SseHandler(running, update_interval), aggregator_(aggregator) {}
 
 ProcessesHandler::~ProcessesHandler() = default;
 

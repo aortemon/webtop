@@ -9,27 +9,12 @@
 #include "aggregator/aggregator.hpp"
 #include "server/router.hpp"
 
-
 namespace webtop::server {
 
 class MetricsHandler;
 class ProcessesHandler;
 class StaticHandler;
 class SseHandler;
-
-class FDCloseGuard {
-  int fd_;
-
- public:
-  explicit FDCloseGuard(int fd) : fd_(fd) {}
-  ~FDCloseGuard() {
-    if (fd_ > 0) {
-      close(fd_);
-    }
-  }
-  FDCloseGuard(const FDCloseGuard &) = delete;
-  FDCloseGuard &operator=(const FDCloseGuard &) = delete;
-};
 
 class HttpServer {
   int common_update_rate_;
@@ -55,9 +40,10 @@ class HttpServer {
   void HandleClientAsync(int client_fd);
   void SetupRoutes();
 
- public:
-  HttpServer(aggregator::MetricsAggregator &aggregator, int port, std::string static_dir,
-             int common_update_rate, int procs_update_rate);
+public:
+  HttpServer(aggregator::MetricsAggregator &aggregator, int port,
+             std::string static_dir, int common_update_rate,
+             int procs_update_rate);
   ~HttpServer();
 
   bool Start();

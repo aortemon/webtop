@@ -24,6 +24,7 @@
 #include "server/handlers/metrics_handler.hpp"
 #include "server/handlers/process_handler.hpp"
 #include "server/handlers/static_handler.hpp"
+#include "util/scope_guard.hpp"
 
 namespace webtop::server {
 
@@ -93,16 +94,17 @@ void HttpServer::SetupRoutes() {
 }
 
 void HttpServer::HandleClient(int client_fd) {
-  // If client descriptor is not be closed to some reason,
-  // it will be done automatically in the end of HandleClient method
-  FDCloseGuard guard(client_fd);
+  auto scope_guard = util::MakeScopeGuard([&client_fd]() {
+    if (client_fd >= 0) {
+      close(client_fd);
+    }
+  });
 
   constexpr int kRequestBuffSize = 4096;
   std::array<char, kRequestBuffSize> buff{};
   auto n = read(client_fd, buff.data(), buff.size() - 1);
 
   if (n <= 0) {
-    close(client_fd);
     return;
   }
 
@@ -111,7 +113,6 @@ void HttpServer::HandleClient(int client_fd) {
 
   size_t method_end = request.find(' ');
   if (method_end == std::string::npos) {
-    close(client_fd);
     return;
   }
 
@@ -120,7 +121,6 @@ void HttpServer::HandleClient(int client_fd) {
   size_t path_start = method_end + 1;
   size_t path_end = request.find(' ', path_start);
   if (path_end == std::string::npos) {
-    close(client_fd);
     return;
   }
 
@@ -131,7 +131,6 @@ void HttpServer::HandleClient(int client_fd) {
     logger::Logger::Instance().Error("405\t" + method +
                                      "\t Method not allowed");
     send(client_fd, response.c_str(), response.size(), 0);
-    close(client_fd);
     return;
   }
 
@@ -214,6 +213,8 @@ bool HttpServer::Start() {
     return false;
   }
 
+  int opt = 1;
+  setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
   struct sockaddr_in address{};
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;

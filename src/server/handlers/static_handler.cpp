@@ -91,8 +91,6 @@ void StaticHandler::Handle(int client_fd, const std::string &path) {
     logger::Logger::Instance().Success("200\tGET\t" + path + "\t" +
                                        std::to_string(client_fd));
   }
-
-  close(client_fd);
 }
 
 } // namespace webtop::server
